@@ -5,50 +5,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ECO</title>
+<title>ECO Sistema</title>
 
 <style>
 
 body{
-margin:0;
-font-family:Arial;
-background:#0f172a;
-color:white;
+font-family: Arial;
+background:#f4f4f4;
+margin:20px;
+}
+
+h2{
 text-align:center;
 }
 
-header{
-padding:80px 20px;
+.box{
+margin-bottom:15px;
 }
 
-h1{
-font-size:48px;
-}
-
-p{
-font-size:20px;
-color:#cbd5e1;
+input{
+width:100%;
+padding:12px;
+font-size:18px;
+box-sizing:border-box;
 }
 
 button{
-margin-top:30px;
-padding:18px 40px;
-font-size:20px;
-background:#22c55e;
-border:none;
-border-radius:8px;
+width:100%;
+padding:15px;
+font-size:18px;
+background:#007bff;
 color:white;
-cursor:pointer;
+border:none;
+margin-top:10px;
 }
 
 button:hover{
-background:#16a34a;
+background:#0056b3;
 }
 
-.section{
-background:#1e293b;
-padding:50px;
-margin-top:40px;
+.result{
+background:#e9ecef;
+}
+
+#app{
+display:none;
 }
 
 </style>
@@ -57,26 +58,160 @@ margin-top:40px;
 
 <body>
 
-<header>
+<div id="login">
 
-<h1>ECO</h1>
+<h2>Acceso ECO</h2>
 
-<p>Tecnología para control de máquinas</p>
+<input type="text" id="usuario" placeholder="Usuario">
+<input type="password" id="clave" placeholder="Contraseña">
 
-<a href="calculadora5.html">
-<button>Ingresar al sistema</button>
-</a>
+<button onclick="login()">Entrar</button>
 
-</header>
-
-<div class="section">
-
-<h2>Sistema de Registro</h2>
-
-<p>Plataforma digital para captura de lecturas de máquinas.</p>
-<p>Desarrollado por : MAGO</p>
 </div>
 
-</body>
+<div id="app">
 
+<h2>Registro de Lectura</h2>
+
+<div class="box">
+<label>Número de Serie</label>
+<input type="text" id="serie">
+</div>
+
+<div class="box">
+<label>Casilla A</label>
+<input type="number" id="A" oninput="calcular()">
+</div>
+
+<div class="box">
+<label>Casilla B</label>
+<input type="number" id="B" oninput="calcular()">
+</div>
+
+<div class="box">
+<label>Resultado E (B - A)</label>
+<input type="number" id="E" class="result" readonly>
+</div>
+
+<div class="box">
+<label>Casilla C</label>
+<input type="number" id="C" oninput="calcular()">
+</div>
+
+<div class="box">
+<label>Casilla D</label>
+<input type="number" id="D" oninput="calcular()">
+</div>
+
+<div class="box">
+<label>Resultado F (D - C)</label>
+<input type="number" id="F" class="result" readonly>
+</div>
+
+<div class="box">
+<label>Total G (E - F)</label>
+<input type="number" id="G" class="result" readonly>
+</div>
+
+<button onclick="enviarDatos()">Enviar</button>
+
+</div>
+
+<script>
+
+let usuarios = {
+"eco1":"1234",
+"eco2":"1234",
+"eco3":"1234",
+"eco4":"1234",
+"eco5":"1234",
+"eco6":"1234",
+"eco7":"1234",
+"eco8":"1234",
+"eco9":"1234",
+"eco10":"1234",
+"eco11":"1234",
+"eco12":"1234",
+"eco13":"1234",
+"eco14":"1234",
+"eco15":"1234"
+};
+
+function login(){
+
+let u = document.getElementById("usuario").value;
+let p = document.getElementById("clave").value;
+
+if(usuarios[u] && usuarios[u] === p){
+
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
+
+}else{
+
+alert("Usuario o contraseña incorrectos");
+
+}
+
+}
+
+function calcular(){
+
+let A = parseFloat(document.getElementById("A").value) || 0;
+let B = parseFloat(document.getElementById("B").value) || 0;
+let C = parseFloat(document.getElementById("C").value) || 0;
+let D = parseFloat(document.getElementById("D").value) || 0;
+
+let E = B - A;
+let F = D - C;
+let G = E - F;
+
+document.getElementById("E").value = E;
+document.getElementById("F").value = F;
+document.getElementById("G").value = G;
+
+}
+
+function enviarDatos(){
+
+let serie = document.getElementById("serie").value;
+let B = document.getElementById("B").value;
+let D = document.getElementById("D").value;
+
+if(!serie || !B || !D){
+alert("Complete Serie, Casilla B y Casilla D");
+return;
+}
+
+let fecha = new Date().toLocaleDateString();
+
+let formData = new FormData();
+
+formData.append("serie", serie);
+formData.append("casillaB", B);
+formData.append("casillaD", D);
+formData.append("fecha", fecha);
+
+fetch("TU_URL_DE_GOOGLE_SCRIPT_AQUI", {
+
+method: "POST",
+body: formData
+
+})
+.then(() => {
+
+alert("Datos enviados");
+
+})
+.catch(() => {
+
+alert("Error al enviar");
+
+});
+
+}
+
+</script>
+
+</body>
 </html>
