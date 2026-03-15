@@ -150,10 +150,12 @@ let usuarios = {
 "eco15":"1234"
 };
 
-function login(){
+function irLogin(){
 
-let u = document.getElementById("usuario").value;
-let p = document.getElementById("clave").value;
+document.getElementById("inicio").style.display="none";
+document.getElementById("login").style.display="block";
+
+}
 
 if(usuarios[u] && usuarios[u] === p){
 
